@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -13,8 +12,11 @@ namespace SmartSchool.API.Controllers
     {
         private readonly SmartSchoolContext _context;
 
-        public AlunoController(SmartSchoolContext context)
+        private readonly IRepository _repository;
+
+        public AlunoController(SmartSchoolContext context, IRepository repository)
         {
+            _repository = repository;
             _context = context;
         }
 
@@ -52,10 +54,13 @@ namespace SmartSchool.API.Controllers
         [HttpPost]
         public IActionResult Post(Aluno aluno)
         {
-            _context.Add(aluno);
-            _context.SaveChanges();
+            _repository.Add(aluno);
+            if (_repository.SaveChanges())
+            {
+                return Ok(aluno);
+            }
 
-            return Ok(aluno);
+            return BadRequest("Não foi possível cadastrar o aluno.");
         }
 
         [HttpPut("{id}")]
@@ -69,10 +74,13 @@ namespace SmartSchool.API.Controllers
                 return BadRequest("Aluno não encontrado");
             }
 
-            _context.Update(aluno);
-            _context.SaveChanges();
+            _repository.Update(aluno);
+            if (_repository.SaveChanges())
+            {
+                return Ok(aluno);
+            }
 
-            return Ok(aluno);
+            return BadRequest("Não foi possível atualizar o aluno.");
         }
 
         [HttpPatch("{id}")]
@@ -86,10 +94,13 @@ namespace SmartSchool.API.Controllers
                 return BadRequest("Aluno não encontrado");
             }
 
-            _context.Update(aluno);
-            _context.SaveChanges();
+            _repository.Update(aluno);
+            if (_repository.SaveChanges())
+            {
+                return Ok(aluno);
+            }
 
-            return Ok(aluno);
+            return BadRequest("Não foi possível atualizar o aluno.");
         }
 
         [HttpDelete("{id}")]
@@ -103,10 +114,13 @@ namespace SmartSchool.API.Controllers
                 return BadRequest("Aluno não encontrado");
             }
 
-            _context.Remove(removeAluno);
-            _context.SaveChanges();
+            _repository.Delete(removeAluno);
+            if (_repository.SaveChanges())
+            {
+                return Ok();
+            }
 
-            return Ok();
+            return BadRequest("Não foi possível remover o aluno.");
         }
     }
 }
