@@ -1,5 +1,8 @@
+using System.Collections.Generic;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SmartSchool.API.Data;
+using SmartSchool.API.DTOs;
 using SmartSchool.API.Models;
 
 namespace SmartSchool.API.Controllers
@@ -9,17 +12,21 @@ namespace SmartSchool.API.Controllers
     public class AlunoController : ControllerBase
     {
         private readonly IRepository _repository;
+        private readonly IMapper _mapper;
 
-        public AlunoController(IRepository repository)
+        public AlunoController(IRepository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
             var alunos = _repository.GetAlunos(true);
-            return Ok(alunos);
+            var alunosResult = _mapper.Map<IEnumerable<AlunoDto>>(alunos);
+            
+            return Ok(alunosResult);
         }
 
         [HttpGet("{id}")]
