@@ -21,6 +21,10 @@ namespace SmartSchool.API.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Método responsável por retornar os dados de todos os alunos
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Get()
         {
@@ -30,6 +34,11 @@ namespace SmartSchool.API.Controllers
             return Ok(model);
         }
 
+        /// <summary>
+        /// Método responsável por retornar os dados de um aluno utilizando o seu código identificador
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
@@ -44,6 +53,11 @@ namespace SmartSchool.API.Controllers
             return Ok(model);
         }
 
+        /// <summary>
+        /// Método responsável por retornar os dados de um aluno utilizando o código da disciplina
+        /// </summary>
+        /// <param name="disciplinaId"></param>
+        /// <returns></returns>
         [HttpGet("disciplina/{disciplinaId}")]
         public IActionResult GetByDisciplinaId(int disciplinaId)
         {
@@ -53,6 +67,11 @@ namespace SmartSchool.API.Controllers
             return Ok(model);
         }
 
+        /// <summary>
+        /// Método responsável por gravar os dados de um aluno
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public IActionResult Post(AlunoRegistrarDto model)
         {
@@ -67,6 +86,12 @@ namespace SmartSchool.API.Controllers
             return BadRequest("Não foi possível cadastrar o aluno.");
         }
 
+        /// <summary>
+        /// Método responsável por atualizar dados de um aluno utilizando seu código identificador
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public IActionResult Put(int id, AlunoRegistrarDto model)
         {
@@ -87,6 +112,12 @@ namespace SmartSchool.API.Controllers
             return BadRequest("Não foi possível atualizar o aluno.");
         }
 
+        /// <summary>
+        /// Método responsável por atualizar parcialmente os dados de um aluno utilizando seu código identificador
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPatch("{id}")]
         public IActionResult Patch(int id, AlunoRegistrarDto model)
         {
@@ -107,6 +138,11 @@ namespace SmartSchool.API.Controllers
             return BadRequest("Não foi possível atualizar o aluno.");
         }
 
+        /// <summary>
+        /// Método responsável por remover os dados de um aluno utilizando o seu código identificador
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

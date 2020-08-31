@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
@@ -12,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using SmartSchool.API.Data;
 
@@ -33,6 +36,31 @@ namespace SmartSchool.API
                 options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IRepository, Repository>();
+
+            services.AddSwaggerGen(options => 
+            {
+                options.SwaggerDoc("smartschoolapi", new OpenApiInfo
+                {
+                    Title = "SmartSchool API",
+                    Version = "1.0",
+                    Description = "Descrição da WebApi da SmartSchool",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Nelson Jr",
+                        Email = "jr.1403@hotmail.com"
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "SmartSchool License",
+                        Url = new Uri("https://opensource.org/licenses/MIT")
+                    }
+                });
+
+                var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlCommentsFullPath = Path.Combine(Environment.CurrentDirectory, xmlCommentsFile);
+
+                options.IncludeXmlComments(xmlCommentsFullPath);
+            });
                 
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
@@ -51,6 +79,13 @@ namespace SmartSchool.API
             //app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseSwagger()
+                .UseSwaggerUI(options => 
+                {
+                    options.SwaggerEndpoint("/swagger/smartschoolapi/swagger.json", "smartschoolapi");
+                    options.RoutePrefix = "";
+                });
 
             //app.UseAuthorization();
 
