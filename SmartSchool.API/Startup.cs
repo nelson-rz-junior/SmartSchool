@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -37,29 +38,47 @@ namespace SmartSchool.API
 
             services.AddScoped<IRepository, Repository>();
 
+            services.AddVersionedApiExplorer(options => 
+            {
+                options.GroupNameFormat = "'v'VVV";
+                options.SubstituteApiVersionInUrl = true;
+            })
+            .AddApiVersioning(options => 
+            {
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.ReportApiVersions = true;
+            });
+
+            var apiProviderDescription = services.BuildServiceProvider()
+                .GetService<IApiVersionDescriptionProvider>();
+
             services.AddSwaggerGen(options => 
             {
-                options.SwaggerDoc("smartschoolapi", new OpenApiInfo
+                foreach (var apiVersionDescription in apiProviderDescription.ApiVersionDescriptions)
                 {
-                    Title = "SmartSchool API",
-                    Version = "1.0",
-                    Description = "Descrição da WebApi da SmartSchool",
-                    Contact = new OpenApiContact
+                    options.SwaggerDoc(apiVersionDescription.GroupName, new OpenApiInfo
                     {
-                        Name = "Nelson Jr",
-                        Email = "jr.1403@hotmail.com"
-                    },
-                    License = new OpenApiLicense
-                    {
-                        Name = "SmartSchool License",
-                        Url = new Uri("https://opensource.org/licenses/MIT")
-                    }
-                });
+                        Title = "SmartSchool API",
+                        Version = apiVersionDescription.ApiVersion.ToString(),
+                        Description = "Descrição da WebApi da SmartSchool",
+                        Contact = new OpenApiContact
+                        {
+                            Name = "Nelson Jr",
+                            Email = "jr.1403@hotmail.com"
+                        },
+                        License = new OpenApiLicense
+                        {
+                            Name = "SmartSchool License",
+                            Url = new Uri("https://opensource.org/licenses/MIT")
+                        }
+                    });
 
-                var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlCommentsFullPath = Path.Combine(Environment.CurrentDirectory, xmlCommentsFile);
+                    var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                    var xmlCommentsFullPath = Path.Combine(Environment.CurrentDirectory, xmlCommentsFile);
 
-                options.IncludeXmlComments(xmlCommentsFullPath);
+                    options.IncludeXmlComments(xmlCommentsFullPath);
+                }
             });
                 
             services.AddControllers()
@@ -69,7 +88,7 @@ namespace SmartSchool.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider apiProviderDescription)
         {
             if (env.IsDevelopment())
             {
@@ -83,7 +102,12 @@ namespace SmartSchool.API
             app.UseSwagger()
                 .UseSwaggerUI(options => 
                 {
-                    options.SwaggerEndpoint("/swagger/smartschoolapi/swagger.json", "smartschoolapi");
+                    foreach (var apiVersionDescription in apiProviderDescription.ApiVersionDescriptions)
+                    {
+                        options.SwaggerEndpoint($"/swagger/{apiVersionDescription.GroupName}/swagger.json", 
+                            apiVersionDescription.GroupName.ToUpperInvariant());
+                    }
+                    
                     options.RoutePrefix = "";
                 });
 

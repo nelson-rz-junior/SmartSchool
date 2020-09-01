@@ -1,6 +1,6 @@
 using System;
 
-namespace SmartSchool.API.DTOs
+namespace SmartSchool.API.V2.DTOs
 {
     public class AlunoRegistrarDto
     {

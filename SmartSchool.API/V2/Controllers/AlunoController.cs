@@ -2,13 +2,14 @@ using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SmartSchool.API.Data;
-using SmartSchool.API.DTOs;
+using SmartSchool.API.V2.DTOs;
 using SmartSchool.API.Models;
 
-namespace SmartSchool.API.Controllers
+namespace SmartSchool.API.V2.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [ApiVersion("2.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class AlunoController : ControllerBase
     {
         private readonly IRepository _repository;

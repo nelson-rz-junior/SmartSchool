@@ -2,13 +2,14 @@ using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SmartSchool.API.Data;
-using SmartSchool.API.DTOs;
+using SmartSchool.API.V1.DTOs;
 using SmartSchool.API.Models;
 
-namespace SmartSchool.API.Controllers
+namespace SmartSchool.API.V1.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class ProfessorController : ControllerBase
     {
         private readonly IRepository _repository;

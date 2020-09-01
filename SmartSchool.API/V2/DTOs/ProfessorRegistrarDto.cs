@@ -1,8 +1,8 @@
 using System;
 
-namespace SmartSchool.API.DTOs
+namespace SmartSchool.API.V2.DTOs
 {
-    public class ProfessorDto
+    public class ProfessorRegistrarDto
     {
         public int Id { get; set; }
 
@@ -10,9 +10,13 @@ namespace SmartSchool.API.DTOs
 
         public string Nome { get; set; }
 
+        public string Sobrenome { get; set; }
+
         public string Telefone { get; set; }
 
         public DateTime DataInicioRegistro { get; set; }
+
+        public DateTime? DataFimRegistro { get; set; }
 
         public bool Ativo { get; set; }
     }
