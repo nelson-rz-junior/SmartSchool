@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using SmartSchool.API.Data;
 using SmartSchool.API.V1.DTOs;
 using SmartSchool.API.Models;
+using System.Threading.Tasks;
+using SmartSchool.API.Helpers;
 
 namespace SmartSchool.API.V1.Controllers
 {
@@ -27,10 +29,12 @@ namespace SmartSchool.API.V1.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get([FromQuery] PageParameters parameters)
         {
-            var alunos = _repository.GetAlunos(true);
+            var alunos = await _repository.GetAlunosAsync(parameters, true);
             var model = _mapper.Map<IEnumerable<AlunoDto>>(alunos);
+
+            Response.AddPagination(alunos.CurrentPage, alunos.PageSize, alunos.TotalItems, alunos.TotalPages);
             
             return Ok(model);
         }
