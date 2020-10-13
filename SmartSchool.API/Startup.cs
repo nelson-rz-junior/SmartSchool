@@ -33,8 +33,17 @@ namespace SmartSchool.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Configuração do MySQL:
+            // Adicionar pacote:
+            // > dotnet add package MySql.Data.EntityFrameworkCore
+            // Executar migrations:
+            // > dotnet ef migrations add InitialConfiguration -o Data/Migrations 
+            // > dotnet ef database update
+            // Gera script inicial do banco de dados, especificando o arquivo e diretório
+            // > dotnet ef migrations script -o scripts/init.sql
+
             services.AddDbContext<SmartSchoolContext>(options => 
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IRepository, Repository>();
 

@@ -1,0 +1,36 @@
+version: "3.7"
+
+volumes: 
+    dbdata:
+
+networks: 
+    backend:
+
+services: 
+    mysql:
+        image: mysql:8.0
+        container_name: mysql
+        volumes: 
+            - dbdata:/var/lib/mysql
+            # Mapeamento entre script de inicialização criado na aplicação e o container do MySQL
+            - /d/Projects/SmartSchool/SmartSchool.API/scripts:/docker-entrypoint-initdb.d
+        environment: 
+            - MYSQL_ROOT_PASSWORD=pass123
+            - bind-address=0.0.0.0
+        networks: 
+            - backend
+        restart: always
+
+    webapi:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: smart-school
+        ports: 
+            - 6060:80
+        networks: 
+            - backend
+        restart: always
+        depends_on: 
+            - mysql
+            
