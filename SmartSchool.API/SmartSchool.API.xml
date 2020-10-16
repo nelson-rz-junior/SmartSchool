@@ -74,6 +74,13 @@
             <param name="disciplinaId"></param>
             <returns></returns>
         </member>
+        <member name="M:SmartSchool.API.V1.Controllers.ProfessorController.GetByAlunoIdAsync(System.Int32)">
+            <summary>
+            Método responsável por retornar os dados de um professor utilizando o código do aluno
+            </summary>
+            <param name="alunoId"></param>
+            <returns></returns>
+        </member>
         <member name="M:SmartSchool.API.V1.Controllers.ProfessorController.Post(SmartSchool.API.V1.DTOs.ProfessorRegistrarDto)">
             <summary>
             Método responsável por gravar os dados de um professor

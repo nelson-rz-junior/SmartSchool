@@ -28,6 +28,8 @@ namespace SmartSchool.API.Data
 
         Professor[] GetProfessoresByDisciplinaId(int disciplinaId, bool includeAlunos = false);
 
+        Task<Professor[]> GetProfessoresByAlunoIdAsync(int alunoId);
+
         Professor GetProfessorById(int professorId, bool includeAlunos = false);
     }
 }

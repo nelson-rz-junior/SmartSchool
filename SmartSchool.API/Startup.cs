@@ -89,6 +89,8 @@ namespace SmartSchool.API
                     options.IncludeXmlComments(xmlCommentsFullPath);
                 }
             });
+
+            services.AddCors();
                 
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
@@ -104,9 +106,12 @@ namespace SmartSchool.API
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseHttpsRedirection();
-
             app.UseRouting();
+
+            app.UseCors(config => config
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowAnyOrigin());
 
             app.UseSwagger()
                 .UseSwaggerUI(options => 
@@ -119,8 +124,6 @@ namespace SmartSchool.API
                     
                     options.RoutePrefix = "";
                 });
-
-            //app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

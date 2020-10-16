@@ -137,6 +137,15 @@ namespace SmartSchool.API.Data
                 .ToArray();
         }
 
+        public async Task<Professor[]> GetProfessoresByAlunoIdAsync(int alunoId)
+        {
+            return await _context.Professores
+                .Where(p => p.Disciplinas.Any(d => d.AlunosDisciplinas.Any(ad => ad.AlunoId == alunoId)))
+                .OrderBy(p => p.Nome)
+                .AsNoTracking()
+                .ToArrayAsync();
+        }
+
         public Professor[] GetProfessoresByDisciplinaId(int disciplinaId, bool includeAlunos = false)
         {
             IQueryable<Professor> query = _context.Professores;
