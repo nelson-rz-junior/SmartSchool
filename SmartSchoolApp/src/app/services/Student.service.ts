@@ -9,31 +9,36 @@ import { Student } from '../models/Student';
 })
 export class StudentService
 {
-  baseURL = `${environment.mainUrlApi}/aluno`;
+  baseUrlV1 = `${environment.mainUrlApiV1}/aluno`;
+  baseUrlV2 = `${environment.mainUrlApiV2}/aluno`;
 
   constructor(private http: HttpClient) { }
 
   getAll(): Observable<Student[]> {
-    return this.http.get<Student[]>(this.baseURL);
+    return this.http.get<Student[]>(this.baseUrlV1);
   }
 
   getById(id: number): Observable<Student> {
-    return this.http.get<Student>(`${this.baseURL}/${id}`);
+    return this.http.get<Student>(`${this.baseUrlV1}/${id}`);
   }
 
   getByDisciplinaId(id: number): Observable<Student[]> {
-    return this.http.get<Student[]>(`${this.baseURL}/disciplina/${id}`);
+    return this.http.get<Student[]>(`${this.baseUrlV1}/disciplina/${id}`);
   }
 
   post(student: Student) {
-    return this.http.post(this.baseURL, student);
+    return this.http.post(this.baseUrlV1, student);
   }
 
   put(student: Student) {
-    return this.http.put(`${this.baseURL}/${student.id}`, student);
+    return this.http.put(`${this.baseUrlV1}/${student.id}`, student);
+  }
+
+  patch(student: Student) {
+    return this.http.patch(`${this.baseUrlV2}/${student.id}`, student);
   }
 
   delete(id: number) {
-    return this.http.delete(`${this.baseURL}/${id}`);
+    return this.http.delete(`${this.baseUrlV1}/${id}`);
   }
 }

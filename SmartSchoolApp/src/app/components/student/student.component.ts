@@ -6,6 +6,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { Util } from 'src/app/helpers/Util';
 import { Student } from 'src/app/models/Student';
 import { Teacher } from 'src/app/models/Teacher';
 import { StudentService } from 'src/app/services/Student.service';
@@ -23,7 +24,6 @@ export class StudentComponent implements OnInit, OnDestroy
   public modalRef: BsModalRef;
   public studentForm: FormGroup;
   public studentSelected: Student;
-  public sampleText: string;
   public teachers: Teacher[];
   public students: Student[];
   public student: Student;
@@ -38,25 +38,27 @@ export class StudentComponent implements OnInit, OnDestroy
     this.createForm();
   }
 
-  ngOnInit(): void
-  {
+  ngOnInit(): void {
     this.getStudents();
   }
 
-  selectStudent(student: Student): void
-  {
-    this.modeSave = 'put';
+  selectStudent(student: Student): void {
+    this.modeSave = 'patch';
     this.studentSelected = student;
-    this.studentForm.patchValue(student);
+
+    this.studentForm.patchValue({
+      id: student.id,
+      nome: Util.getFirstName(student.nome),
+      sobrenome: Util.getLastName(student.nome),
+      telefone: student.telefone
+    });
   }
 
-  unselectStudent(): void
-  {
+  unselectStudent(): void {
     this.studentSelected = null;
   }
 
-  getTeachers(template: TemplateRef<any>, id: number): void
-  {
+  getTeachers(template: TemplateRef<any>, id: number): void {
     this.spinner.show();
 
     this.teacherService.getByStudentId(id)
@@ -66,33 +68,30 @@ export class StudentComponent implements OnInit, OnDestroy
         this.modalRef = this.modalService.show(template);
       },
       (error: any) => {
-        this.toastr.error(`erro: ${error}`);
+        this.spinner.hide();
+        this.toastr.error(error.message);
         console.error(error);
       },
       () => this.spinner.hide());
   }
 
-  createForm(): void
-  {
+  createForm(): void {
     this.studentForm = this.fb.group({
       id: [0],
       nome: ['', Validators.required],
+      sobrenome: [''],
       telefone: ['', Validators.required]
     });
   }
 
-  saveStudent(): void
-  {
-    if (this.studentForm.valid)
-    {
+  saveStudent(): void {
+    if (this.studentForm.valid) {
       this.spinner.show();
 
-      if (this.modeSave === 'post')
-      {
+      if (this.modeSave === 'post') {
         this.student = {...this.studentForm.value};
       }
-      else
-      {
+      else {
         this.student = {id: this.studentSelected.id, ...this.studentForm.value};
       }
 
@@ -103,7 +102,8 @@ export class StudentComponent implements OnInit, OnDestroy
           this.toastr.success('Aluno salvo com sucesso!');
         },
         (error: any) => {
-          this.toastr.error(`Erro ao salvar aluno!`);
+          this.spinner.hide();
+          this.toastr.error(error.message);
           console.error(error);
         },
         () => this.spinner.hide());
@@ -120,32 +120,27 @@ export class StudentComponent implements OnInit, OnDestroy
       .subscribe((students: Student[]) => {
         this.students = students;
 
-        if (id > 0)
-        {
+        if (id > 0) {
           this.selectStudent(this.students.find(s => s.id === id));
         }
-
-        this.toastr.success('Alunos carregados com sucesso!');
       },
       (error: any) => {
-        this.toastr.error('Erro ao carregar os alunos!');
+        this.spinner.hide();
+        this.toastr.error(error.message);
         console.error(error);
       },
       () => this.spinner.hide());
   }
 
-  openModal(template: TemplateRef<any>, studentId: number): void
-  {
+  openModal(template: TemplateRef<any>, studentId: number): void {
     this.getTeachers(template, studentId);
   }
 
-  closeModal(): void
-  {
+  closeModal(): void {
     this.modalRef.hide();
   }
 
-  ngOnDestroy(): void
-  {
+  ngOnDestroy(): void {
     this.unsubscriber.next();
     this.unsubscriber.complete();
   }

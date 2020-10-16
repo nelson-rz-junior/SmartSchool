@@ -1,34 +1,32 @@
 <div class="container">
   <div class="row">
-    <div class="col-sm-6" *ngIf="studentSelected">
-      <div class="row">
-        <div class="mr-auto">
-          <app-title [title]="'Cód. Aluno: ' + studentSelected.id"></app-title>
-        </div>
-        <div class="mt-1">
-          <button class="btn btn-sm btn-outline-danger" (click)="unselectStudent()">
-            Fechar
-          </button>
-        </div>
+    <div class="col-sm-4" *ngIf="studentSelected">
+      <div class="mr-auto">
+        <app-title [title]="'Aluno #' + studentSelected.id"></app-title>
       </div>
 
       <form [formGroup]="studentForm">
         <div class="form-group">
-          <label for="formGroupExampleInput">Nome Completo</label>
-          <input type="text" formControlName="nome" class="form-control">
+          <label for="name">Nome</label>
+          <input type="text" id="name" formControlName="nome" class="form-control">
         </div>
         <div class="form-group">
-          <label for="formGroupExampleInput2">Telefone</label>
-          <input type="text" formControlName="telefone" class="form-control">
+          <label for="lastName">Sobrenome</label>
+          <input type="text" id="lastName" formControlName="sobrenome" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="phone">Telefone</label>
+          <input type="text" id="phone" formControlName="telefone" class="form-control">
         </div>
         <div class="form-group">
           <hr>
-          <button class="btn btn-success" (click)="saveStudent()" [disabled]="!studentForm.valid">Enviar</button>
+          <button class="btn btn-success mr-2" (click)="saveStudent()" [disabled]="!studentForm.valid">Enviar</button>
+          <button class="btn btn-outline-danger" (click)="unselectStudent()">Fechar</button>
         </div>
       </form>
     </div>
 
-    <div [ngClass]="{'col-sm-6': studentSelected, 'col-sm-12': !studentSelected}">
+    <div [ngClass]="{'col-sm-8': studentSelected, 'col-sm-12': !studentSelected}">
       <app-title [title]="title"></app-title>
 
       <table class="table table-hover">
@@ -64,6 +62,10 @@
 
 <ng-template #template>
   <div class="modal-footer">
+    <div class="modal-body">
+      <app-student-teacher (closeModal)="closeModal()" [teachers]="teachers"></app-student-teacher>
+    </div>
+
     <button type="button" class="btn pull-right" aria-label="Close" (click)="modalRef.hide()">
       FECHAR
     </button>
