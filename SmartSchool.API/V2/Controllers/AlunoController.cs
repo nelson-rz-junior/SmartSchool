@@ -120,7 +120,7 @@ namespace SmartSchool.API.V2.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPatch("{id}")]
-        public IActionResult Patch(int id, AlunoRegistrarDto model)
+        public IActionResult Patch(int id, AlunoPatchDto model)
         {
             var updateAluno = _repository.GetAlunoById(id);
             if (updateAluno == null)

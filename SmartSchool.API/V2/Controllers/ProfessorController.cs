@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SmartSchool.API.Data;
 using SmartSchool.API.V2.DTOs;
 using SmartSchool.API.Models;
+using System.Threading.Tasks;
 
 namespace SmartSchool.API.V2.Controllers
 {
@@ -63,6 +64,20 @@ namespace SmartSchool.API.V2.Controllers
         public IActionResult GetByDisciplinaId(int disciplinaId)
         {
             var professores = _repository.GetProfessoresByDisciplinaId(disciplinaId);
+            var professoresResult = _mapper.Map<IEnumerable<ProfessorDto>>(professores);
+
+            return Ok(professoresResult);
+        }
+
+        /// <summary>
+        /// Método responsável por retornar os dados de um professor utilizando o código do aluno
+        /// </summary>
+        /// <param name="alunoId"></param>
+        /// <returns></returns>
+        [HttpGet("aluno/{alunoId}")]
+        public async Task<IActionResult> GetByAlunoIdAsync(int alunoId)
+        {
+            var professores = await _repository.GetProfessoresByAlunoIdAsync(alunoId);
             var professoresResult = _mapper.Map<IEnumerable<ProfessorDto>>(professores);
 
             return Ok(professoresResult);

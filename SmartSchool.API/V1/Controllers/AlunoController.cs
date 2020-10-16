@@ -118,32 +118,6 @@ namespace SmartSchool.API.V1.Controllers
         }
 
         /// <summary>
-        /// Método responsável por atualizar parcialmente os dados de um aluno utilizando seu código identificador
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [HttpPatch("{id}")]
-        public IActionResult Patch(int id, AlunoRegistrarDto model)
-        {
-            var updateAluno = _repository.GetAlunoById(id);
-            if (updateAluno == null)
-            {
-                return BadRequest("Aluno não encontrado.");
-            }
-
-            var aluno = _mapper.Map(model, updateAluno);
-
-            _repository.Update(aluno);
-            if (_repository.SaveChanges())
-            {
-                return Created($"api/aluno/{aluno.Id}",_mapper.Map<AlunoDto>(aluno));
-            }
-
-            return BadRequest("Não foi possível atualizar o aluno.");
-        }
-
-        /// <summary>
         /// Método responsável por remover os dados de um aluno utilizando o seu código identificador
         /// </summary>
         /// <param name="id"></param>
