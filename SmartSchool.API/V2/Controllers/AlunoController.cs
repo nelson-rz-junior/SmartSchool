@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using SmartSchool.API.Data;
 using SmartSchool.API.V2.DTOs;
 using SmartSchool.API.Models;
+using SmartSchool.API.Hubs;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
 
 namespace SmartSchool.API.V2.Controllers
 {
@@ -16,10 +19,13 @@ namespace SmartSchool.API.V2.Controllers
 
         private readonly IMapper _mapper;
 
-        public AlunoController(IRepository repository, IMapper mapper)
+        private readonly IHubContext<NotificationHub> _hubContext;
+
+        public AlunoController(IRepository repository, IMapper mapper, IHubContext<NotificationHub> hubContext)
         {
             _repository = repository;
             _mapper = mapper;
+            _hubContext = hubContext;
         }
 
         /// <summary>
@@ -27,10 +33,12 @@ namespace SmartSchool.API.V2.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
             var alunos = _repository.GetAlunos(true);
             var model = _mapper.Map<IEnumerable<AlunoDto>>(alunos);
+            
+            await new NotificationHub().NewMessage(_hubContext, "messageReceived", "SmartSchoolAPI: GetStudents");
             
             return Ok(model);
         }
