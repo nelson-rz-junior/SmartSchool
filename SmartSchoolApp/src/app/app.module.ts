@@ -19,6 +19,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { HttpClientModule } from '@angular/common/http';
 import { StudentTeacherComponent } from './components/student/student-teacher/student-teacher.component';
+import { ApiMessageComponent } from './components/api-message/api-message.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { StudentTeacherComponent } from './components/student/student-teacher/st
     StudentTeacherComponent,
     TeacherComponent,
     ProfileComponent,
-    DashboardComponent
+    DashboardComponent,
+    ApiMessageComponent
   ],
   imports: [
     BrowserModule,

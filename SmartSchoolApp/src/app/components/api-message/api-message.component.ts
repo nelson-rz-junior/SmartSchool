@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
+import { ApiNotification } from 'src/app/models/ApiNotification';
 
 @Component({
   selector: 'app-api-message',
@@ -7,6 +8,8 @@ import * as signalR from '@microsoft/signalr';
   styleUrls: ['./api-message.component.css']
 })
 export class ApiMessageComponent implements OnInit {
+
+  public messages = Array<ApiNotification>();
 
   constructor() { }
 
@@ -16,13 +19,17 @@ export class ApiMessageComponent implements OnInit {
     .withAutomaticReconnect()
     .build();
 
-    connection.on('messageReceived', (message: string) => {
-      console.log(`${message}`);
+    connection.on('messageReceived', (call: string, message: string) => {
+      this.messages.push({ call, message });
     });
 
     connection.start()
-      .then(() => console.log('Connected'))
+      .then(() => {
+        const call = '-';
+        const message = 'Connected';
+
+        this.messages.push({ call, message });
+      })
       .catch(err => console.error(err));
   }
-
 }
