@@ -7,6 +7,7 @@ using SmartSchool.API.Models;
 using SmartSchool.API.Hubs;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 
 namespace SmartSchool.API.V2.Controllers
 {
@@ -38,7 +39,7 @@ namespace SmartSchool.API.V2.Controllers
             var alunos = _repository.GetAlunos(true);
             var model = _mapper.Map<IEnumerable<AlunoDto>>(alunos);
             
-            await new NotificationHub().NewMessage(_hubContext, "messageReceived", "SmartSchoolAPI: GetStudents");
+            await new NotificationHub().NewMessage(_hubContext, "messageReceived", "Get()", JsonConvert.SerializeObject(model));
             
             return Ok(model);
         }
@@ -49,15 +50,20 @@ namespace SmartSchool.API.V2.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
             var aluno = _repository.GetAlunoById(id);
             if (aluno == null)
             {
-                return BadRequest($"O aluno {id} não foi encontrado.");
+                var errorMessage = $"O aluno {id} não foi encontrado.";
+
+                await new NotificationHub().NewMessage(_hubContext, "messageReceived", $"Get({id})", errorMessage);
+                return BadRequest(errorMessage);
             }
 
             var model = _mapper.Map<AlunoDto>(aluno);
+
+            await new NotificationHub().NewMessage(_hubContext, "messageReceived", $"Get({id})", JsonConvert.SerializeObject(model));
 
             return Ok(model);
         }
@@ -68,10 +74,13 @@ namespace SmartSchool.API.V2.Controllers
         /// <param name="disciplinaId"></param>
         /// <returns></returns>
         [HttpGet("disciplina/{disciplinaId}")]
-        public IActionResult GetByDisciplinaId(int disciplinaId)
+        public async Task<IActionResult> GetByDisciplinaId(int disciplinaId)
         {
             var alunos = _repository.GetAlunosByDisciplinaId(disciplinaId);
             var model = _mapper.Map<IEnumerable<AlunoDto>>(alunos);
+
+            await new NotificationHub().NewMessage(_hubContext, "messageReceived", $"GetByDisciplinaId({disciplinaId})", 
+                JsonConvert.SerializeObject(model));
 
             return Ok(model);
         }
