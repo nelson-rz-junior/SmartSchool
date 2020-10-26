@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { ApiMessageComponent } from './components/api-message/api-message.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { StudentComponent } from './components/student/student.component';
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: 'student/:id', component: StudentComponent },
   { path: 'teachers', component: TeacherComponent },
   { path: 'profile', component: ProfileComponent },
+  { path: 'api-notification', component: ApiMessageComponent },
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: '**', redirectTo: 'dashboard', pathMatch: 'full' }
 ];
