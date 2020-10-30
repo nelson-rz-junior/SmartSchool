@@ -2,13 +2,16 @@ using System;
 using System.IO;
 using System.Reflection;
 using AutoMapper;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
@@ -88,6 +91,11 @@ namespace SmartSchool.API
 
             services.AddSignalR();
 
+            services.AddHealthChecks()
+                .AddCheck("Self", () => HealthCheckResult.Healthy())
+                .AddMySql(Configuration.GetConnectionString("DefaultConnection"), "SmartSchool.API Database")
+                .AddSignalRHub(Configuration["SignalR:Url"], "SmartSchool.API SignalR");
+
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder => builder
@@ -126,6 +134,13 @@ namespace SmartSchool.API
                     
                     options.RoutePrefix = "";
                 });
+
+            // http://localhost:5000/hc
+            app.UseHealthChecks("/hc", new HealthCheckOptions
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
 
             app.UseEndpoints(endpoints =>
             {
