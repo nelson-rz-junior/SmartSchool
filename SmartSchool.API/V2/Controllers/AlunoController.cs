@@ -157,6 +157,33 @@ namespace SmartSchool.API.V2.Controllers
         }
 
         /// <summary>
+        /// Método responsável por trocar o status de um aluno utilizando seu código identificador
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPatch("{id}/changeStatus")]
+        public IActionResult ChangeStatus(int id, AlunoStatusDto model)
+        {
+            var updateAluno = _repository.GetAlunoById(id);
+            if (updateAluno == null)
+            {
+                return BadRequest("Aluno não encontrado.");
+            }
+
+            updateAluno.Ativo = model.Status;
+
+            _repository.Update(updateAluno);
+            if (_repository.SaveChanges())
+            {
+                var statusMessage = model.Status ? "ativado" : "desativado";
+                return Ok(new { message = $"Aluno {statusMessage} com sucesso." });
+            }
+
+            return BadRequest("Não foi possível atualizar o aluno.");
+        }
+
+        /// <summary>
         /// Método responsável por remover os dados de um aluno utilizando o seu código identificador
         /// </summary>
         /// <param name="id"></param>
