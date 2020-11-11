@@ -49,8 +49,13 @@
             <td>{{student.telefone}}</td>
             <td>
               <div class="btn-group">
-                <button (click)="openModal(template, student.id)" class="btn btn-sm btn-outline-primary">Professores</button>
-                <button class="btn btn-sm btn-outline-danger">Desativar</button>
+                <button *ngIf="student.ativo" (click)="openModal(template, student.id)" class="btn btn-sm btn-outline-secondary">
+                  Professores
+                </button>
+                <button (click)="changeStatus(student)" class="btn btn-sm"
+                  [ngClass]="{'btn-outline-danger': student.ativo, 'btn-outline-success': !student.ativo}">
+                    {{student.ativo ? "Desativar" : "Ativar"}}
+                </button>
               </div>
             </td>
           </tr>

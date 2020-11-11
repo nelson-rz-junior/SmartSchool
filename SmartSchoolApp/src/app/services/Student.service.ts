@@ -38,6 +38,10 @@ export class StudentService
     return this.http.patch(`${this.baseUrlV2}/${student.id}`, student);
   }
 
+  changeStatus(student: Student) {
+    return this.http.patch(`${this.baseUrlV2}/${student.id}/changeStatus`, { status: student.ativo });
+  }
+
   delete(id: number) {
     return this.http.delete(`${this.baseUrlV1}/${id}`);
   }

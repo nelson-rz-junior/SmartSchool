@@ -9,6 +9,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Util } from 'src/app/helpers/Util';
 import { Student } from 'src/app/models/Student';
 import { Teacher } from 'src/app/models/Teacher';
+import { Response } from 'src/app/models/Response';
 import { StudentService } from 'src/app/services/Student.service';
 import { TeacherService } from 'src/app/services/Teacher.service';
 
@@ -58,23 +59,6 @@ export class StudentComponent implements OnInit, OnDestroy
     this.studentSelected = null;
   }
 
-  getTeachers(template: TemplateRef<any>, id: number): void {
-    this.spinner.show();
-
-    this.teacherService.getByStudentId(id)
-      .pipe(takeUntil(this.unsubscriber))
-      .subscribe((teachers: Teacher[]) => {
-        this.teachers = teachers;
-        this.modalRef = this.modalService.show(template);
-      },
-      (error: any) => {
-        this.spinner.hide();
-        this.toastr.error(error.message);
-        console.error(error);
-      },
-      () => this.spinner.hide());
-  }
-
   createForm(): void {
     this.studentForm = this.fb.group({
       id: [0],
@@ -84,30 +68,21 @@ export class StudentComponent implements OnInit, OnDestroy
     });
   }
 
-  saveStudent(): void {
-    if (this.studentForm.valid) {
-      this.spinner.show();
+  getTeachers(template: TemplateRef<any>, id: number): void {
+    this.spinner.show();
 
-      if (this.modeSave === 'post') {
-        this.student = {...this.studentForm.value};
-      }
-      else {
-        this.student = {id: this.studentSelected.id, ...this.studentForm.value};
-      }
-
-      this.studentService[this.modeSave](this.student)
-        .pipe(takeUntil(this.unsubscriber))
-        .subscribe(() => {
-          this.getStudents();
-          this.toastr.success('Aluno salvo com sucesso!');
-        },
-        (error: any) => {
-          this.spinner.hide();
-          this.toastr.error(error.message);
-          console.error(error);
-        },
-        () => this.spinner.hide());
-    }
+    this.teacherService.getByStudentId(id)
+      .pipe(takeUntil(this.unsubscriber))
+      .subscribe((teachers: Teacher[]) => {
+        this.teachers = teachers;
+        this.modalRef = this.modalService.show(template);
+      },
+      (errorResp: any) => {
+        this.toastr.error(errorResp.error);
+        console.error(errorResp);
+        this.spinner.hide();
+      },
+      () => this.spinner.hide());
   }
 
   getStudents(): void {
@@ -124,10 +99,55 @@ export class StudentComponent implements OnInit, OnDestroy
           this.selectStudent(this.students.find(s => s.id === id));
         }
       },
-      (error: any) => {
+      (errorResp: any) => {
+        this.toastr.error(errorResp.error);
+        console.error(errorResp);
         this.spinner.hide();
-        this.toastr.error(error.message);
-        console.error(error);
+      },
+      () => this.spinner.hide());
+  }
+
+  saveStudent(): void {
+    if (this.studentForm.valid) {
+      this.spinner.show();
+
+      if (this.modeSave === 'post') {
+        this.student = {...this.studentForm.value};
+      }
+      else {
+        this.student = {id: this.studentSelected.id, ativo: this.studentSelected.ativo, ...this.studentForm.value};
+      }
+
+      this.studentService[this.modeSave](this.student)
+        .pipe(takeUntil(this.unsubscriber))
+        .subscribe(() => {
+          this.getStudents();
+          this.toastr.success('Aluno salvo com sucesso!');
+        },
+        (errorResp: any) => {
+          this.toastr.error(errorResp.error);
+          console.error(errorResp);
+          this.spinner.hide();
+        },
+        () => this.spinner.hide());
+    }
+  }
+
+  changeStatus(student: Student): void {
+    this.spinner.show();
+
+    student.ativo = !student.ativo;
+
+    this.studentService.changeStatus(student)
+      .pipe(takeUntil(this.unsubscriber))
+      .subscribe((resp: Response) => {
+        this.getStudents();
+        this.toastr.success(resp.message);
+      },
+      (errorResp: any) => {
+        this.toastr.error(errorResp.error);
+        console.error(errorResp);
+        this.spinner.hide();
       },
       () => this.spinner.hide());
   }
