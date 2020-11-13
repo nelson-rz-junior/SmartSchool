@@ -1,0 +1,26 @@
+<div>
+  <app-title [title]="'Alunos'"></app-title>
+
+  <table class="table table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th scope="col">Visualizar</th>
+        <th scope="col">#</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Sobrenome</th>
+        <th scope="col">Telefone</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let student of students">
+        <td>
+          <button (click)="selectStudent(student.id)" class="text-dark btn btn-sm btn-outline-warning">Detalhe</button>
+        </td>
+        <td scope="row">{{student.id}}</td>
+        <td>{{student.nome}}</td>
+        <td>{{student.sobrenome}}</td>
+        <td>{{student.telefone}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

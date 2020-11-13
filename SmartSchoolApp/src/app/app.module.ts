@@ -10,6 +10,10 @@ import { StudentComponent } from './components/student/student.component';
 import { TeacherComponent } from './components/teacher/teacher.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { TeacherDetailComponent } from './components/teacher/teacher-detail/teacher-detail.component';
+import { TeacherStudentComponent } from './components/teacher/teacher-student/teacher-student.component';
+import { StudentTeacherComponent } from './components/student/student-teacher/student-teacher.component';
+import { ApiMessageComponent } from './components/api-message/api-message.component';
 
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,8 +22,6 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { HttpClientModule } from '@angular/common/http';
-import { StudentTeacherComponent } from './components/student/student-teacher/student-teacher.component';
-import { ApiMessageComponent } from './components/api-message/api-message.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,8 @@ import { ApiMessageComponent } from './components/api-message/api-message.compon
     TeacherComponent,
     ProfileComponent,
     DashboardComponent,
+    TeacherDetailComponent,
+    TeacherStudentComponent,
     ApiMessageComponent
   ],
   imports: [

@@ -28,6 +28,9 @@ namespace SmartSchool.API.V2.Profiles
 
             CreateMap<ProfessorDto, Professor>();
             CreateMap<Professor, ProfessorRegistrarDto>().ReverseMap();
+
+            CreateMap<Disciplina, DisciplinaDto>().ReverseMap();
+            CreateMap<Curso, CursoDto>().ReverseMap();
         }
     }
 }

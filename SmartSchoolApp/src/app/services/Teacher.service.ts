@@ -15,11 +15,11 @@ export class TeacherService
   constructor(private http: HttpClient) { }
 
   getAll(): Observable<Teacher[]> {
-    return this.http.get<Teacher[]>(this.baseUrlV1);
+    return this.http.get<Teacher[]>(this.baseUrlV2);
   }
 
   getById(id: number): Observable<Teacher> {
-    return this.http.get<Teacher>(`${this.baseUrlV1}/${id}`);
+    return this.http.get<Teacher>(`${this.baseUrlV2}/${id}`);
   }
 
   getByDisciplineId(id: number): Observable<Teacher[]> {

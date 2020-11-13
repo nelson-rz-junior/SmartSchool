@@ -1,6 +1,6 @@
 export class Discipline
 {
   id: number;
-  Name: string;
+  nome: string;
   teacherId: number;
 }

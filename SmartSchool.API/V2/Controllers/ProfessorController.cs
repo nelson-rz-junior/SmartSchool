@@ -44,7 +44,7 @@ namespace SmartSchool.API.V2.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var professor = _repository.GetProfessorById(id);
+            var professor = _repository.GetProfessorById(id, true);
             if (professor == null)
             {
                 return BadRequest($"O professor {id} não foi encontrado.");
@@ -77,7 +77,7 @@ namespace SmartSchool.API.V2.Controllers
         [HttpGet("aluno/{alunoId}")]
         public async Task<IActionResult> GetByAlunoIdAsync(int alunoId)
         {
-            var professores = await _repository.GetProfessoresByAlunoIdAsync(alunoId);
+            var professores = await _repository.GetProfessoresByAlunoIdAsync(alunoId, true);
             var professoresResult = _mapper.Map<IEnumerable<ProfessorDto>>(professores);
 
             return Ok(professoresResult);
