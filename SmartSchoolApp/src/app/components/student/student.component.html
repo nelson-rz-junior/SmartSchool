@@ -1,67 +1,73 @@
-  <div class="row">
-    <div class="col-sm-4" *ngIf="studentSelected">
-      <div class="mr-auto">
-        <app-title [title]="'Aluno #' + studentSelected.id"></app-title>
-      </div>
-
-      <form [formGroup]="studentForm">
-        <div class="form-group">
-          <label for="name">Nome</label>
-          <input type="text" id="name" formControlName="nome" class="form-control">
-        </div>
-        <div class="form-group">
-          <label for="lastName">Sobrenome</label>
-          <input type="text" id="lastName" formControlName="sobrenome" class="form-control">
-        </div>
-        <div class="form-group">
-          <label for="phone">Telefone</label>
-          <input type="text" id="phone" formControlName="telefone" class="form-control">
-        </div>
-        <div class="form-group">
-          <hr>
-          <button class="btn btn-success mr-2" (click)="saveStudent()" [disabled]="!studentForm.valid">Enviar</button>
-          <button class="btn btn-outline-danger" (click)="unselectStudent()">Fechar</button>
-        </div>
-      </form>
+<div class="row">
+  <div class="col-sm-4" *ngIf="studentSelected">
+    <div class="mr-auto">
+      <app-title [title]="'Aluno #' + studentSelected.id"></app-title>
     </div>
 
-    <div [ngClass]="{'col-sm-8': studentSelected, 'col-sm-12': !studentSelected}">
-      <app-title [title]="title"></app-title>
+    <form [formGroup]="studentForm">
+      <div class="form-group">
+        <label for="name">Nome</label>
+        <input type="text" id="name" formControlName="nome" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="lastName">Sobrenome</label>
+        <input type="text" id="lastName" formControlName="sobrenome" class="form-control">
+      </div>
+      <div class="form-group">
+        <label for="phone">Telefone</label>
+        <input type="text" id="phone" formControlName="telefone" class="form-control">
+      </div>
+      <div class="form-group">
+        <hr>
+        <button class="btn btn-success mr-2" (click)="saveStudent()" [disabled]="!studentForm.valid">Enviar</button>
+        <button class="btn btn-outline-danger" (click)="unselectStudent()">Fechar</button>
+      </div>
+    </form>
+  </div>
 
-      <table class="table table-hover">
-        <thead class="thead-light">
-          <tr>
-            <th scope="col">Visualizar</th>
-            <th scope="col">#</th>
-            <th scope="col">Nome Completo</th>
-            <th scope="col">Telefone</th>
-            <th scope="col">Opções</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let student of students">
-            <td>
-              <button (click)="selectStudent(student)" class="text-dark btn btn-sm btn-outline-warning">Detalhe</button>
-            </td>
-            <td scope="row">{{student.id}}</td>
-            <td>{{student.nome}}</td>
-            <td>{{student.telefone}}</td>
-            <td>
-              <div class="btn-group">
-                <button *ngIf="student.ativo" (click)="openModal(template, student.id)" class="btn btn-sm btn-outline-secondary">
-                  Professores
-                </button>
-                <button (click)="changeStatus(student)" class="btn btn-sm"
-                  [ngClass]="{'btn-outline-danger': student.ativo, 'btn-outline-success': !student.ativo}">
-                    {{student.ativo ? "Desativar" : "Ativar"}}
-                </button>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <div [ngClass]="{'col-sm-8': studentSelected, 'col-sm-12': !studentSelected}">
+    <app-title [title]="title"></app-title>
+
+    <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">Visualizar</th>
+          <th scope="col">#</th>
+          <th scope="col">Nome Completo</th>
+          <th scope="col">Telefone</th>
+          <th scope="col">Opções</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let student of students">
+          <td>
+            <button (click)="selectStudent(student)" class="text-dark btn btn-sm btn-outline-warning">Detalhe</button>
+          </td>
+          <td scope="row">{{student.id}}</td>
+          <td>{{student.nome}}</td>
+          <td>{{student.telefone}}</td>
+          <td>
+            <div class="btn-group">
+              <button *ngIf="student.ativo" (click)="openModal(template, student.id)" class="btn btn-sm btn-outline-secondary">
+                Professores
+              </button>
+              <button (click)="changeStatus(student)" class="btn btn-sm"
+                [ngClass]="{'btn-outline-danger': student.ativo, 'btn-outline-success': !student.ativo}">
+                  {{student.ativo ? "Desativar" : "Ativar"}}
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-center">
+      <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [(ngModel)]="pagination.currentPage"
+        [itemsPerPage]="pagination.itemsPerPage" (pageChanged)="pageChanged($event)" previousText="&lsaquo;"
+        nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+      </pagination>
     </div>
   </div>
+</div>
 
 <ng-template #template>
   <div class="modal-body">

@@ -22,6 +22,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { HttpClientModule } from '@angular/common/http';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { HttpClientModule } from '@angular/common/http';
     ModalModule.forRoot(),
     NgxSpinnerModule,
     BrowserAnimationsModule,
+    PaginationModule.forRoot(),
     ToastrModule.forRoot({
       timeOut: 3500,
       positionClass: 'toast-bottom-right',

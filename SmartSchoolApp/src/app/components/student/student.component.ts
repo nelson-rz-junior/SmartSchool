@@ -12,6 +12,8 @@ import { Teacher } from 'src/app/models/Teacher';
 import { Response } from 'src/app/models/Response';
 import { StudentService } from 'src/app/services/Student.service';
 import { TeacherService } from 'src/app/services/Teacher.service';
+import { PageChangedEvent } from 'ngx-bootstrap/pagination';
+import { Pagination, PaginationResult } from 'src/app/models/Pagination';
 
 @Component({
   selector: 'app-student',
@@ -28,6 +30,7 @@ export class StudentComponent implements OnInit, OnDestroy
   public teachers: Teacher[];
   public students: Student[];
   public student: Student;
+  public pagination: Pagination;
   public deleteStudentMessage: string;
   public modeSave = 'post';
   public title = 'Alunos';
@@ -40,6 +43,11 @@ export class StudentComponent implements OnInit, OnDestroy
   }
 
   ngOnInit(): void {
+    this.pagination = {
+      currentPage: 1,
+      itemsPerPage: 3
+    } as Pagination;
+
     this.getStudents();
   }
 
@@ -90,10 +98,11 @@ export class StudentComponent implements OnInit, OnDestroy
 
     this.spinner.show();
 
-    this.studentService.getAll()
+    this.studentService.getAll(this.pagination.currentPage, this.pagination.itemsPerPage)
       .pipe(takeUntil(this.unsubscriber))
-      .subscribe((students: Student[]) => {
-        this.students = students;
+      .subscribe((students: PaginationResult<Student[]>) => {
+        this.students = students.result;
+        this.pagination = students.pagination;
 
         if (id > 0) {
           this.selectStudent(this.students.find(s => s.id === id));
@@ -150,6 +159,11 @@ export class StudentComponent implements OnInit, OnDestroy
         this.spinner.hide();
       },
       () => this.spinner.hide());
+  }
+
+  pageChanged(event: PageChangedEvent): void {
+    this.pagination.currentPage = event.page;
+    this.getStudents();
   }
 
   openModal(template: TemplateRef<any>, studentId: number): void {

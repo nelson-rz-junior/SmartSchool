@@ -1,7 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { PaginationResult } from '../models/Pagination';
 import { Student } from '../models/Student';
 
 @Injectable({
@@ -14,8 +16,24 @@ export class StudentService
 
   constructor(private http: HttpClient) { }
 
-  getAll(): Observable<Student[]> {
-    return this.http.get<Student[]>(this.baseUrlV1);
+  getAll(currentPage?: number, itemsPerPage?: number): Observable<PaginationResult<Student[]>> {
+    const paginatedResult: PaginationResult<Student[]> = new PaginationResult<Student[]>();
+
+    let params = new HttpParams();
+    if (currentPage !== null && itemsPerPage !== null) {
+      params = params.append('PageNumber', currentPage.toString());
+      params = params.append('PageSize', itemsPerPage.toString());
+    }
+
+    return this.http.get<Student[]>(this.baseUrlV1, { observe: 'response', params})
+      .pipe(map(response => {
+        paginatedResult.result = response.body;
+        if (response.headers.get('Pagination') !== null) {
+          paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+        }
+
+        return paginatedResult;
+      }));
   }
 
   getById(id: number): Observable<Student> {
