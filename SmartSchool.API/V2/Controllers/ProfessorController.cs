@@ -135,7 +135,7 @@ namespace SmartSchool.API.V2.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPatch("{id}")]
-        public IActionResult Patch(int id, ProfessorRegistrarDto model)
+        public IActionResult Patch(int id, ProfessorPatchDto model)
         {
             var updateProfessor = _repository.GetProfessorById(id);
             if (updateProfessor == null)
@@ -148,7 +148,7 @@ namespace SmartSchool.API.V2.Controllers
             _repository.Update(professor);
             if (_repository.SaveChanges())
             {
-                return Created($"api/professor/{professor.Id}", _mapper.Map<ProfessorDto>(professor));
+                return Created($"api/professor/{professor.Id}", _mapper.Map<ProfessorPatchDto>(professor));
             }
 
             return BadRequest("Não foi possível atualizar o professor.");

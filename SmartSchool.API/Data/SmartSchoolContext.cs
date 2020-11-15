@@ -48,11 +48,20 @@ namespace SmartSchool.API.Data
             modelBuilder.Entity<Professor>()
                 .HasData(new List<Professor>
                 {
-                    new Professor(1, 1, "Lauro", "Oliveira"),
-                    new Professor(2, 2, "Roberto", "Soares"),
-                    new Professor(3, 3, "Ronaldo", "Marconi"),
-                    new Professor(4, 4, "Rodrigo", "Carvalho"),
-                    new Professor(5, 5, "Alexandre", "Montanha"),
+                    new Professor { Id = 1, Registro = 1, Nome = "Lauro", Sobrenome = "Oliveira", Telefone = "+551111112222", 
+                        DataInicioRegistro = DateTime.Parse("1985/01/02"), DataFimRegistro = DateTime.Parse("1986/01/02"), Ativo = true },
+
+                    new Professor { Id = 2, Registro = 8, Nome = "Roberto", Sobrenome = "Soares", Telefone = "+551133334444", 
+                        DataInicioRegistro = DateTime.Parse("1984/10/20"), DataFimRegistro = DateTime.Parse("1985/10/20"), Ativo = true },
+
+                    new Professor { Id = 3, Registro = 3, Nome = "Ronaldo", Sobrenome = "Marconi", Telefone = "+551155556666", 
+                        DataInicioRegistro = DateTime.Parse("1983/05/11"), DataFimRegistro = DateTime.Parse("1984/05/11"), Ativo = true },
+
+                    new Professor { Id = 4, Registro = 5, Nome = "Rodrigo", Sobrenome = "Carvalho", Telefone = "+551177778888", 
+                        DataInicioRegistro = DateTime.Parse("1982/05/28"), DataFimRegistro = DateTime.Parse("1983/05/28"), Ativo = true },
+
+                    new Professor { Id = 5, Registro = 2, Nome = "Alexandre", Sobrenome = "Montanha", Telefone = "+551199990000", 
+                        DataInicioRegistro = DateTime.Parse("1981/07/09"), DataFimRegistro = DateTime.Parse("1982/07/09"), Ativo = true }
                 });
 
             modelBuilder.Entity<Curso>()

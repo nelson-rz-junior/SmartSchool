@@ -188,7 +188,7 @@
             <param name="model"></param>
             <returns></returns>
         </member>
-        <member name="M:SmartSchool.API.V2.Controllers.ProfessorController.Patch(System.Int32,SmartSchool.API.V2.DTOs.ProfessorRegistrarDto)">
+        <member name="M:SmartSchool.API.V2.Controllers.ProfessorController.Patch(System.Int32,SmartSchool.API.V2.DTOs.ProfessorPatchDto)">
             <summary>
             Método responsável por atualizar parcialmente os dados de um professor utilizando o seu código identificador
             </summary>

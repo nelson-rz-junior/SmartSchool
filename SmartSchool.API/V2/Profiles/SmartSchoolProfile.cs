@@ -27,6 +27,7 @@ namespace SmartSchool.API.V2.Profiles
                     opt => opt.MapFrom(src => $"{src.Nome} {src.Sobrenome}"));
 
             CreateMap<ProfessorDto, Professor>();
+            CreateMap<Professor, ProfessorPatchDto>().ReverseMap();
             CreateMap<Professor, ProfessorRegistrarDto>().ReverseMap();
 
             CreateMap<Disciplina, DisciplinaDto>().ReverseMap();
