@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Teacher } from '../models/Teacher';
+import { UpdateTeacher } from '../models/UpdateTeacher';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,10 @@ export class TeacherService
 
   put(teacher: Teacher) {
     return this.http.put(`${this.baseUrlV1}/${teacher.id}`, teacher);
+  }
+
+  patch(teacher: UpdateTeacher) {
+    return this.http.patch(`${this.baseUrlV2}/${teacher.id}`, teacher);
   }
 
   delete(id: number) {

@@ -105,7 +105,10 @@ export class StudentComponent implements OnInit, OnDestroy
         this.pagination = students.pagination;
 
         if (id > 0) {
-          this.selectStudent(this.students.find(s => s.id === id));
+          const student = this.students.find(s => s.id === id);
+          if (student != null) {
+            this.selectStudent(student);
+          }
         }
       },
       (errorResp: any) => {
@@ -131,7 +134,7 @@ export class StudentComponent implements OnInit, OnDestroy
         .pipe(takeUntil(this.unsubscriber))
         .subscribe(() => {
           this.getStudents();
-          this.toastr.success('Aluno salvo com sucesso!');
+          this.toastr.success('Aluno salvo com sucesso.');
         },
         (errorResp: any) => {
           this.toastr.error(errorResp.error);
