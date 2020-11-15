@@ -54,10 +54,7 @@ export class TeacherDetailComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscriber))
       .subscribe((teacher: Teacher) => {
         this.teacherSelected = teacher;
-        this.teacherForm.patchValue({
-          id: teacher.id,
-          nome: teacher.nome
-        });
+        this.teacherForm.patchValue(teacher);
       },
       (errorResp: any) => {
         this.toastr.error(errorResp.error);
@@ -97,9 +94,6 @@ export class TeacherDetailComponent implements OnInit, OnDestroy {
     const fullName = this.updateTeacher.nome;
     this.updateTeacher.nome = Util.getFirstName(fullName);
     this.updateTeacher.sobrenome = Util.getLastName(fullName);
-
-    console.log(`"${this.updateTeacher.nome}"`);
-    console.log(`"${this.updateTeacher.sobrenome}"`);
 
     this.teacherService.patch(this.updateTeacher)
       .pipe(takeUntil(this.unsubscriber))
